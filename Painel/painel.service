@@ -1,0 +1,13 @@
+[Unit]
+Description=Controle do Painel do RetroServer
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/Painel/painel.py
+User=pi
+WorkingDirectory=/home/pi/Painel
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
