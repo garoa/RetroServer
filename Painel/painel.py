@@ -24,7 +24,7 @@ logging.basicConfig(level="INFO")
 
 # Conexoes ao GPIO
 leds = [ LED(18), LED(14), LED(15), LED(17) ]
-botao = Button(27)
+botao = Button(27, pull_up=False)
 
 # Iniciacoes de display
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=None, i2c_address=0x3c, i2c_bus=1)
@@ -100,6 +100,7 @@ def tela_fita():
 
 # Tratamento botao
 def trata_botao():
+    # espera soltar
     draw.rectangle((0,0,width,height), outline=0, fill=0)
     draw.text((0, 0),  "Solte o botao",font=font8,fill=255)
     disp.image(image)
@@ -107,23 +108,45 @@ def trata_botao():
     sleep (0.2)
     while botao.is_pressed:
         sleep (0.2)
-    draw.text((0, 10),  "Pressione por:",font=font8,fill=255)
-    draw.text((0, 20),  " 5s para shutdown,",font=font8,fill=255)
-    draw.text((0, 30),  "10s para reboot",font=font8,fill=255)
+    
+    # explica opcoes
+    draw.rectangle((0,0,width,height), outline=0, fill=0)
+    draw.text((0, 0),  "Pressione por:",font=font8,fill=255)
+    draw.text((0, 10),  " 5s para shutdown",font=font8,fill=255)
+    draw.text((0, 20),  "10s para reboot",font=font8,fill=255)
     disp.image(image)
     disp.display()
+    
+    # espera apertar por ate 5 seg
     inicio = time()
-    while ((time()-inicio) < 5.0) and  not botao.is_pressed:
+    while ((time()-inicio) < 5.0) and not botao.is_pressed:
         sleep (0.2)
     sleep (0.2)
+    
+    # se apertou espera soltar
     if botao.is_pressed:
         inicio = time()
+        estagio = 0
         while botao.is_pressed:
             sleep (0.2)
-        if (time()-inicio) < 10.0:
-            call(["sudo", "shutdown -h now"])
-        else:
-            call(["sudo", "reboot"])
+            delta = time()-inicio
+            if (estagio == 0) and (delta >= 5.0):
+                draw.text((0, 40),  "SHUTDOWN",font=font8,fill=255)
+                disp.image(image)
+                disp.display()
+                estagio = 1
+            if (estagio == 1) and (delta >= 10.0):
+                draw.rectangle((0,40,width,height), outline=0, fill=0)
+                draw.text((0, 40),  "REBOOT",font=font8,fill=255)
+                disp.image(image)
+                disp.display()
+                estagio = 2
+        # faz a acao associada ao tempo que ficou apertado
+        if delta >= 5.0:
+            if delta < 10.0:
+                call(["sudo", "shutdown", "-h", "now"])
+            else:
+                call(["sudo", "reboot"])
 
 #try:
 passo = 0
