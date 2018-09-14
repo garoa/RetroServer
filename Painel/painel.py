@@ -86,7 +86,7 @@ def tela_uso():
     draw.text((0, 20), "Conecte com SSH em",font=font8,fill=255)
     draw.text((0, 30), ip,font=font10,fill=255)
     draw.text((0, 45), "Login: hacker",font=font8,fill=255)
-    draw.text((0, 54), "Passord: garoa",font=font8,fill=255)
+    draw.text((0, 54), "Password: garoa",font=font8,fill=255)
     disp.image(image)
     disp.display()
     
@@ -127,6 +127,7 @@ def trata_botao():
     if botao.is_pressed:
         inicio = time()
         estagio = 0
+        delata = 0
         while botao.is_pressed:
             sleep (0.2)
             delta = time()-inicio
@@ -142,11 +143,10 @@ def trata_botao():
                 disp.display()
                 estagio = 2
         # faz a acao associada ao tempo que ficou apertado
-        if delta >= 5.0:
-            if delta < 10.0:
-                call(["sudo", "shutdown", "-h", "now"])
-            else:
-                call(["sudo", "reboot"])
+        if delta >= 10.0:
+            call(["sudo", "reboot"])
+        elif delta >= 5.0
+            call(["sudo", "shutdown", "-h", "now"])
 
 #try:
 passo = 0
