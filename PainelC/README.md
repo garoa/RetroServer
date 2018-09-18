@@ -15,5 +15,3 @@ O acesso ao gpio e I2C é feito utilizando a biblioteca pigpio
 O fonte usado para escrita é uma conversão de font8x8_basic de Daniel Hepper,
 que por sua vez se baseou em uma fonte feita por Marcel Sondaar, ambas no
 domínio público.
-
-WORK IN PROGRESS!

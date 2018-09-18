@@ -1,8 +1,5 @@
 /*
     display.c   Modulo de controle do display do painel do RetroServer
-    
-    TODO: Adaptar para rodar como new-style deamon
-          https://www.freedesktop.org/software/systemd/man/daemon.html#New-Style%20Daemons
 */
 
 #include <stdio.h>
@@ -77,6 +74,7 @@ void displayInit()
   displayClear();
 }
 
+// Um buzzer de zeros para limpar a memporia do video
 static char zeros[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 // Limpa todo o display

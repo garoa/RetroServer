@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 ExecStart=/home/pi/PainelC/painelc
-User=pi
+User=root
 WorkingDirectory=/home/pi/PainelC
 Restart=on-failure
 

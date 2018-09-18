@@ -1,8 +1,5 @@
 /*
     leds.c  Modulo de controle dos LEDs do painel do RetroServer
-    
-    TODO: Adaptar para rodar como new-style deamon
-          https://www.freedesktop.org/software/systemd/man/daemon.html#New-Style%20Daemons
 */
 
 #include <stdio.h>

@@ -1,8 +1,7 @@
 /*
     painelc.c   Modulo principal do controle do painel do RetroServer
-    
-    TODO: Adaptar para rodar como new-style deamon
-          https://www.freedesktop.org/software/systemd/man/daemon.html#New-Style%20Daemons
+                Preparado para rodar como new-style deamon
+                https://www.freedesktop.org/software/systemd/man/daemon.html#New-Style%20Daemons
 */
 
 #include <stdio.h>
@@ -39,18 +38,22 @@ int main(int argc, char *argv[])
     // Inicia acesso ao IO
     if (gpioInitialise() < 0)
     {
-        fprintf(stderr, "pigpio initialisation failed\n");
+        fprintf(stderr, "<3>Erro ao iniciaar pigpio\n");
         return 1;
     }
 
     // Captura sinalizacoes
     if (signal(SIGINT, sig_handler) == SIG_ERR) 
     {
-        fprintf(stderr, "can't catch SIGINT\n");
+        fprintf(stderr, "<4>Erro ao capturar SIGINT\n");
     }
     if (signal(SIGTERM, sig_handler) == SIG_ERR) 
     {
-        fprintf(stderr, "can't catch SIGTERM\n");
+        fprintf(stderr, "<4>Erro ao capturar SIGTERM\n");
+    }
+    if (signal(SIGHUP, sig_handler) == SIG_ERR) 
+    {
+        fprintf(stderr, "<4>Erro ao capturar SIGHUP\n");
     }
 
     // Inicia tratamento dos LEDs
@@ -63,13 +66,13 @@ int main(int argc, char *argv[])
     gpioSetMode(BOTAO, PI_INPUT);
     gpioSetPullUpDown(BOTAO, PI_PUD_DOWN);
     
-    // Obtem o nosso IP
+    // Descobre o nosso IP
     getIP(sIP);
     
     // Loop principal
     for (;;)
     {
-        usleep(100000);
+        usleep(100000);     // 0,1 seg
         if (gpioRead(BOTAO))
             trataBotao();
         if ((passo % 4) == 0)
@@ -108,6 +111,7 @@ static void telaLogo (char *sIP)
     displayText (0, 56, aux);
 }
 
+// Instrucoes de uso
 static void telaUso (char *sIP)
 {
     displayClear ();
@@ -118,6 +122,7 @@ static void telaUso (char *sIP)
     displayText (0, 56, "Password: garoa");
 }
 
+// Animacao de unidade de fita
 static void telaFita ()
 {
     static int iTape = 0;
@@ -126,6 +131,7 @@ static void telaFita ()
     iTape = (iTape+1) % 3;
 }
 
+// Tratamento do botao
 static void trataBotao ()
 {
     struct timespec inicio, agora;
@@ -182,10 +188,12 @@ static void trataBotao ()
         // Faz a acao associada ao tempo que ficou apertado
         if (delta >= 10)
         {
+            fprintf(stderr, "<6>Solicitando reboot\n");
             system ("sudo reboot");
         }
         else if (delta >= 5)
         {
+            fprintf(stderr, "<6>Solicitando shutdown\n");
             system ("sudo shutdown -h now");
         }
     }
@@ -201,8 +209,7 @@ static void sig_handler(int signo)
             gpioTerminate();
             exit (0);
             break;
+        case SIGHUP:
+            break;
     }
-    
-  if (signo == SIGINT)
-    printf("received SIGINT\n");
 }
