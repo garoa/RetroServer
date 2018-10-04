@@ -1,4 +1,5 @@
 #!/usr/local/bin/yabasic
+20 clear screen
 21 print "Voce esta sozinho e os dragoes comem as 8!"
 22 print
 23 h = 5
@@ -6,7 +7,7 @@
 25 d = 1 + int(ran(11))
 26 rem print d
 27 gosub 57
-28 print "Em qual caverna voce atira a sua lanca?"
+28 print "Em qual caverna voce atira a sua lanca";
 29 input t
 30 if (d = t)  goto 51
 31 if ((d-t)*(t-d) >= -1) print "S*N*O*R*T!"
@@ -20,7 +21,7 @@
 39 print "se move!"
 40 goto 42
 41 print "aguarda."
-42 print "Voce se arrisca a pegar a lanca? (S ou N)"
+42 print "Voce se arrisca a pegar a lanca (S ou N)";
 43 input a$
 44 if (a$="S" or a$="s") goto 48
 45 if (a$<>"N" and a$<>"n") goto 42
